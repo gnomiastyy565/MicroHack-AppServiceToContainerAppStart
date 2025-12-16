@@ -6,6 +6,9 @@ on:
       - main
   pull_request:
 
+permissions:
+  id-token: write
+
 jobs:
   build-push-deploy:
     runs-on: ubuntu-latest
