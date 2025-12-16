@@ -37,10 +37,26 @@ jobs:
     - name: Get Latest Container Image Tag
       id: get_tag
       run: |
-        TAG=$(az acr repository show-tags --name stacs03acr --repository microhack-app --orderby time_desc --output tsv --detail | head -n 1 | awk '{print $4}')
-        NUMERIC_TAG=$(echo "$TAG" | grep -oE '[0-9]+')
-        INCREMENTED_TAG=$((NUMERIC_TAG + 1))
-        UPDATED_TAG=$(echo "$TAG" | sed "s/$NUMERIC_TAG/$INCREMENTED_TAG/")
+        set -e
+        TAGS=$(az acr repository show-tags \
+          --name stacs03acr \
+          --repository microhack-app \
+          --orderby time_desc \
+          --output tsv --detail || echo "")
+
+        if [ -z "$TAGS" ]; then
+          echo "No tags found, using v1"
+          UPDATED_TAG="v1"
+        else
+          TAG=$(echo "$TAGS" | head -n 1 | awk '{print $4}')
+          NUMERIC_TAG=$(echo "$TAG" | grep -oE '[0-9]+')
+          if [ -z "$NUMERIC_TAG" ]; then
+            NUMERIC_TAG=0
+          fi
+          INCREMENTED_TAG=$((NUMERIC_TAG + 1))
+          UPDATED_TAG="v$INCREMENTED_TAG"
+        fi
+
         echo "image_tag=$UPDATED_TAG" >> $GITHUB_OUTPUT
 
     # 4️⃣ Build Docker image with new tag
