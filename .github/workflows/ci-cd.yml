@@ -37,7 +37,7 @@ jobs:
     - name: Get Latest Container Image Tag
       id: get_tag
       run: |
-        TAG=$(az acr repository show-tags --name stacs03acr --repository microhackapp --orderby time_desc --output tsv --detail | head -n 1 | awk '{print $4}')
+        TAG=$(az acr repository show-tags --name stacs03acr --repository microhack-app --orderby time_desc --output tsv --detail | head -n 1 | awk '{print $4}')
         NUMERIC_TAG=$(echo "$TAG" | grep -oE '[0-9]+')
         INCREMENTED_TAG=$((NUMERIC_TAG + 1))
         UPDATED_TAG=$(echo "$TAG" | sed "s/$NUMERIC_TAG/$INCREMENTED_TAG/")
