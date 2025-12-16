@@ -39,7 +39,7 @@ jobs:
       run: |
         TAG=$(az acr repository show-tags \
           --name ${{ secrets.ACR_USERNAME }} \
-          --repository microhack-app \
+          --repository MicroHack-AppServiceToContainerAppStart \
           --orderby time_desc \
           --output tsv --detail | head -n 1 | awk '{print $4}')
         NUMERIC_TAG=$(echo "$TAG" | grep -oE '[0-9]+')
