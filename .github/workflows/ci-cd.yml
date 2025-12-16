@@ -38,7 +38,7 @@ jobs:
       id: get_tag
       run: |
         TAG=$(az acr repository show-tags \
-          --name ${{ secrets.ACR_NAME }} \
+          --name ${{ secrets.ACR_USERNAME }} \
           --repository microhack-app \
           --orderby time_desc \
           --output tsv --detail | head -n 1 | awk '{print $4}')
